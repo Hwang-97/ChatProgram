@@ -38,7 +38,6 @@ public class Main extends Application {
 			return;
 		}
 		Runnable thead = new Runnable() {
-
 			@Override
 			public void run() {
 				while(true) {
@@ -55,7 +54,6 @@ public class Main extends Application {
 						break;
 					}
 				}
-				
 			}
 		};
 		threadPooL = Executors.newCachedThreadPool();
@@ -80,18 +78,17 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
 	/**
 	 * javafx GUI
 	 */
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		BorderPane root = new BorderPane(); // 레이아웃
 		root.setPadding(new Insets(5));
 		
 		TextArea textArea = new TextArea();
 		textArea.setEditable(false);
-		textArea.setFont(new Font("D2",15));
+		textArea.setFont(new Font("D2Coding",15));
 		root.setCenter(textArea);
 		
 		Button toggleButton = new Button("시작하기");

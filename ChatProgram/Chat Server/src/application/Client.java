@@ -19,34 +19,40 @@ public class Client {
 			@Override
 			public void run() {
 				try {
-					InputStream in = socket.getInputStream();
-					byte[] buffer = new byte[512];
-					int length = in.read(buffer);
-					while(length == -1) throw new IOException();
-					System.out.println("[메시지 수신 성공]"
+					while(true) {
+						InputStream in = socket.getInputStream();
+						byte[] buffer = new byte[512];
+						
+						int length = in.read(buffer);
+						while(length == -1) throw new IOException();
+						System.out.println("[메시지 수신 성공]"
 							+ socket.getRemoteSocketAddress()
 							+": " + Thread.currentThread().getName());
-					String message = new String(buffer,0,length,"UTF-8");
-					for(Client client : Main.clients) {
-						client.send(message);
+						
+						String message = new String(buffer,0,length,"UTF-8");
+						for(Client client : Main.clients) {
+//							System.out.println(client);
+//							System.out.println(message);
+							client.send(message);
+						}
 					}
 				}catch(Exception e) {
 					try {
 						System.out.println("[메시지 수신 오류]"
 								+ socket.getRemoteSocketAddress()
 								+": "+Thread.currentThread().getName());
+						Main.clients.remove(Client.this);
+						socket.close();
 					}catch(Exception e2) {
 						e2.printStackTrace();
 					}
-					e.printStackTrace();
 				}
 			}
 		};
-		Main.threadPooL.submit(thread);
+		Main.threadPooL.submit(thread);// thread 를 등록
 	}
 	public void send(String message) {
 		Runnable thread = new Runnable() {
-			
 			@Override
 			public void run() {
 				try {
@@ -67,7 +73,6 @@ public class Client {
 				}
 			}
 		};
-		
 		Main.threadPooL.submit(thread);
 	}
 }

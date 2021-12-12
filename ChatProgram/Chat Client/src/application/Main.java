@@ -28,6 +28,7 @@ public class Main extends Application {
 			public void run() {
 				try {
 					socket = new Socket(IP,port);
+					receive();
 				}catch(Exception e) {
 					if(!socket.isClosed()) {
 						stopClient();
@@ -50,7 +51,8 @@ public class Main extends Application {
 		}
 	}
 	
-	public void receive() {
+	public void receive() {// 아예 동작 안함..
+//		System.out.println("작동 확인....");
 		while(true) {
 			try {
 				InputStream in = socket.getInputStream();
@@ -59,6 +61,7 @@ public class Main extends Application {
 				if(length == -1) throw new IOException();
 				String message = new String(buffer,0,length,"UTF-8");
 				Platform.runLater(()->{
+//					System.out.println(message); -- 데이터 안넘어옴...
 					textArea.appendText(message);
 				});
 			}catch(Exception e) {
@@ -74,6 +77,7 @@ public class Main extends Application {
 				try {
 					OutputStream out = socket.getOutputStream();
 					byte[] buffer = message.getBytes("UTF-8");
+					out.write(buffer);
 					out.flush();
 				}catch(Exception e) {
 					stopClient();
